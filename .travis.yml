@@ -30,7 +30,7 @@ after_success:
     - git add $TARGET_DIR/cf-conventions.pdf
     - git add $TARGET_DIR/NFFFFFF-1.0.png
     - git commit -m "Auto-generated"
-    - git push -q https://$marqh:{MKY}@github.com/marqh/cf-conventions.git gh-pages >/dev/null 2>&1
+    - git push -q https://$marqh:{MKY}@github.com/marqh/cf-conventions.git gh-pages
 
 branches:
     only:
