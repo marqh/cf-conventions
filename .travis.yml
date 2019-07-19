@@ -9,8 +9,8 @@ install:
     - asciidoctor-pdf --version
 
 before_script:
-    - git config --global user.email $GIT_EMAIL
-    - git config --global user.name $GIT_NAME
+    - git config --global user.email m@m.net
+    - git config --global user.name marqh
 
 script:
     - mkdir build
@@ -22,32 +22,26 @@ after_success:
     # tag directory and normal build goes into the root directory.
     - git fetch origin gh-pages:gh-pages
     - git checkout gh-pages
-    - if [[ $TRAVIS_TAG ]]; then
-        TARGET_DIR=$TRAVIS_TAG;
-      else
-        TARGET_DIR='.';
-      fi
+    - TARGET_DIR='.';
     - mkdir -p $TARGET_DIR
     - cp build/cf-conventions.html $TARGET_DIR/
     - cp build/cf-conventions.pdf $TARGET_DIR/
     - git add $TARGET_DIR/cf-conventions.html
     - git add $TARGET_DIR/cf-conventions.pdf
     - git add $TARGET_DIR/NFFFFFF-1.0.png
-    - if [[ $TRAVIS_TAG ]]; then
-        sed s/Latest/$TRAVIS_TAG/ index.html > $TARGET_DIR/index.html;
-        git add $TARGET_DIR/index.html;
-      fi
-    - git commit -m "Auto-generated from ${TRAVIS_REPO_SLUG}@${TRAVIS_COMMIT}"
-    - git push https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages >/dev/null 2>&1
+    - git commit -m "Auto-generated"
+    - git push -q https://$marqh:{MKY}@github.com/marqh/cf-conventions.git gh-pages >/dev/null 2>&1
 
 branches:
     only:
-        - master
+        - notmaster
         # Build tags such as "v1.6"
         - /^v\d+\.\d+/
 
 env:
     global:
+        # value for test
+	secure: "cXpKCUI/Q8N4bWhJliv5Sxmg7cd+GEsycrarNZ33Idw+RwkwnItyRpJC/hPFY8rfBqu7LnMgX1i11NTvDaW9P2tIyt9Pi5UuV/aPBEkR5khjVmCDIc5KvCtPLUa4IYJBHbVFKZT0RCOcuVuJ0Bp1eZbpuiPBBJy9bZLUcEcFHLG7I4i1s6P0UL4uaKJyujPSlJn2Gr7hA0sBpwVOPernUgbBpt0UHn/Qu0JBhyf+Cx2NfexmBTY3j1IXupwJiJzshdYOPPEWFow5AOYcziJpxfdCGVo8mIP9T317ejl557RVOWaWvY1JQB0lSNagOqzaANPnzTF0hGK1aL2WO79/xpwSfUdh5+JujcaylAtEVeJMC/mHHrhYVeQ3MtXhAI4GPqxcs0yd2GAtvvMvW1kwF5qv3KK65okD8LXX6GKMJanuCwfLptfzjwN1ibwDb6SFX1rup332iaMwBiBYHqfmSQIITmTnhOoAyIL4+WHIyITW2u377uBNXsGs08c41IB6oh7Inlcq7h834I5Pm1zb2ga0B08yeq0Euh2Ky3j1dJMtI1wNheX+adp25eTCdAHL9ZhNhj6GcDJWY46iAAkmsZM2zd+NM57pf/SNDsktsCaRaLenw67m0Figy1aW7o12DJ7I67BN6EgzoOJHZCvVUDwP9C9OVE9mNcoY8rezrf0="
         # Values for cf-conventions-bot/cf-conventions
         - secure: "d+R5tzKSdhytTnjrIW3oAqEnoiVY1I/pqcfNQDBrHDNE+FuCuaGCvjrQuRCil50SAMiZ0/80aN8t9I7iwY2hCcUGJoyfgzTjPi/x0RytcQR4q5qylJw33L3Va1r7g91Y7Fi78c5rXLqXZf/wqhiyTw4uLfMum0ka8TLGn0U960mD9PO8uhavJNZbUsF4puN2q5s7PWBhayVm6S5WiGpKINH3lhH4aFz5+oEBidtBRHMZtT4w5hmjXpU0nd6CfF9/+reMmTjJnbNGCbtTRN3UodIU2OY7ToeLD73f7aBoIOVS2LSjtyWZzCvWszcH7y2U2HlmIiyUA2/DMAnYKYuxHa4P0R5xpSZWUSMb517/YVRWDrJVcQaoWdB4hYQsSYo6Nv/Hj35vf1E7sXiwZCPzSaEWRes31E5mf22Ug5+5R1GwTv0FZ2BxdJ+EZThVvWkm2Cvb4yrOObCq+jC2Z1iJ/f9P0q7DNKzgePiv5MsMWzNFfJ5nwRG9cRl5tbghnScKFntf2LSMVtmHUFHYty1TgxgePko4hUOD3IB14zv71dJLu07qdRuyjZYOjM/qwGfW+FaEcuNC1DHKU+eJPGP9GJjaf+iCM/FQiYiepuofp5ys7k4yqLLlW/FCWGNIPZEdKt4ZggHAl9rCmUDMZF5gClr9YjrbYtCl8mOVYKCVPUg="
         - secure: "3KygyBd58pedh3zsDMAI8HZY7G5w7Y4ZYDvAERBPoZQmM23XD0Ot8TPUM3RGAVBsAhxwomrVaBJNRaMc9/yr8cvarD+o8G/YfgITNVDsSbXTb6cBkA499bTawDK1ocKDGXUYTwGbaLSV9kLiD/0NXptkFEQFzsNtRwsvUXXHOp+j4UBJutCZKZhD/1OfHxk23JmKhkAgeKcOGJ8F3xv3NPwp5DBJ3z3/l31aVjckft+og0EPARJOFxlLEA3/pKwJpuV4LdvuiWK5slDc+IVMgAmJm+5BlqaluH+zBxMol3/uXL57JX0rNIOTKwXQj6Xy+r1iQMlrazK1qy0Z/xQN5IBGjdu4CaDxhg1Kh0yfkZ+TtnamnjbdXYW1/AJW3kuVDFJAdWdRnuZAI4NIWPJTVDDgDVCnqyzduM2O/q8lqvA2U1eTpTnGcExDJZO3zMCj+/opAj1o00HBdxS7hFhN/phBuARwCz+Vj1hoC6p+jC515X+1mhtuP1ghiGVwrmJTyqY1Xc8xJF6xqqhTKR6SGphgeM8OnHeoJeCBspS1ehJkHm9Z7ENmB+bIV082aw4Ti95v0rdRtUOF4L9UUsPJvq/uwxFVAMYr6nbZM4pd+kko+tQsbUoC6g6N+Zn1vcNFQYDkK1StBESxLQ8SxZXXt+Xbjv1bvT88isyKpXlxAQw="
