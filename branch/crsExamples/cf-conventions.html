@@ -471,7 +471,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author30" class="author">Christopher&#160;Barker</span><br>
 <span id="author31" class="author">Sadie&#160;Bartholomew</span><br>
 <span id="revnumber">version v1.12.0-rc7-24-gb724218,</span>
-<span id="revdate">14&#160;January,&#160;2025&#160;13:13:28Z</span>
+<span id="revdate">14&#160;January,&#160;2025&#160;14:53:27Z</span>
 <br><span id="revremark"></span>
 </div>
 </div>
@@ -894,7 +894,7 @@ J.5. <a href="#quadratic3">Figure J.5</a></p>
 5.9. <a href="#latitude-and-longitude-on-the-wgs-1984-datum">Latitude and longitude on the WGS 1984 datum</a><br>
 5.10. <a href="#british-national-grid">British National Grid</a><br>
 5.11. <a href="#latitude-and-longitude-on-the-wgs-1984-datum-in-crs-wkt-format">Latitude and longitude on the WGS 1984 datum + CRS WKT</a><br>
-5.12. <a href="#british-national-grid-newlyn-datum-in-crs-wkt-format">British National Grid + Newlyn Datum in CRS WKT format</a><br>
+5.12. <a href="#british-national-grid-newlyn-datum-in-crs-wkt-format">British National Grid in CRS WKT format</a><br>
 5.13. <a href="#british-national-grid-newlyn-datum-with-wgs84-in-crs-wkt-format">British National Grid + Newlyn Datum + referenced WGS84 Geodetic in CRS WKT format</a><br>
 5.14. <a href="#multiple-forecasts-from-single-analysis">"Multiple forecasts from a single analysis"</a><br>
 5.15. <a href="#a-domain-with-independent-coordinate-variables">A domain with independent coordinate variables.</a><br>
@@ -3673,13 +3673,7 @@ Names of projection. <code>PARAMETERs</code> follow the spellings used in the EP
 <div class="ulist">
 <ul>
 <li>
-<p>use of the <code>VERT_DATUM</code> element to specify vertical datum information</p>
-</li>
-<li>
-<p>use of additional <code>PARAMETER</code> elements (albeit not essential ones in this example) to define the location of the false origin of the projection</p>
-</li>
-<li>
-<p>use of <code>AUTHORITY</code> elements to specify object identifier codes assigned by an external authority, OGP/EPSG in this instance</p>
+<p>use of <code>ID</code> elements to specify object identifier codes assigned by an external authority, OGP/EPSG in this instance</p>
 </li>
 </ul>
 </div>
@@ -3698,15 +3692,17 @@ Names of projection. <code>PARAMETERs</code> follow the spellings used in the EP
     crs:semi_major_axis = 6378137.0 ;
     crs:inverse_flattening = 298.257223563 ;
     crs:crs_wkt =
-     GEODCRS["WGS 84",
-     DATUM["World Geodetic System 1984",
-       ELLIPSOID["WGS 84",6378137,298.257223563,
-         LENGTHUNIT["metre",1.0]]],
-     PRIMEM["Greenwich",0],
-     CS[ellipsoidal,3],
-       AXIS["(lat)",north,ANGLEUNIT["degree",0.0174532925199433]],
-       AXIS["(lon)",east,ANGLEUNIT["degree",0.0174532925199433]],
-       AXIS["ellipsoidal height (h)",up,LENGTHUNIT["metre",1.0]]]
+     GEOGCRS["WGS 84",
+       DATUM["WGS84",
+         ELLIPSOID["WGS 84",6378137,298.257223563,
+           LENGTHUNIT["metre",1]]],
+         PRIMEM["Greenwich",0],
+       CS[ellipsoidal,2],
+         AXIS["Geodetic latitude (Lat)",north],
+         AXIS["Geodetic longitude (Lon)",east],
+           ANGLEUNIT["degree",0.0174532925199433],
+       ID["EPSG",4326]]
+       ;
   ...</pre>
 </div>
 </div>
@@ -3719,7 +3715,7 @@ Also for readability, we have dropped the quotation marks which would delimit th
 This pseudo CDL will not parse directly.</p>
 </div>
 <div id="british-national-grid-newlyn-datum-in-crs-wkt-format" class="exampleblock">
-<div class="title">Example 5.12. British National Grid + Newlyn Datum in CRS WKT format</div>
+<div class="title">Example 5.12. British National Grid in CRS WKT format</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -3756,44 +3752,32 @@ variables:
     crs:reference_ellipsoid_name = "Airy 1830" ;
     crs:prime_meridian_name = "Greenwich" ;
     crs:towgs84 = 375., -111., 431., 0., 0., 0., 0. ;
-    crs:crs_wkt = "COMPOUNDCRS["OSGB 1936 / British National Grid + ODN",
-      PROJCRS["OSGB 1936 / British National Grid",
-        BASEGEODCRS["OSGB 1936",
-          DATUM["OSGB 1936",
-            ELLIPSOID["Airy 1830", 6377563.396, 299.3249646,
-              LENGTHUNIT["metre",1.0]]
-          ],
-          PRIMEM ["Greenwich", 0],
-          UNIT ["degree", 0.0174532925199433]
-        ],
-        CONVERSION["OSGB",
-          METHOD["Transverse Mercator"],
-          PARAMETER["False easting", 400000, LENGTHUNIT["metre",1.0]],
-          PARAMETER["False northing", -100000, LENGTHUNIT["metre",1.0]],
-          PARAMETER["Longitude of natural origin", -2.0,
-            ANGLEUNIT["degree",0.0174532925199433]],
-          PARAMETER["Latitude of natural origin", 49.0,
-            ANGLEUNIT["degree",0.0174532925199433]],
-          PARAMETER["Longitude of false origin", -7.556,
-            ANGLEUNIT["degree",0.0174532925199433]],
-          PARAMETER["Latitude of false origin", 49.766,
-            ANGLEUNIT["degree",0.0174532925199433]],
-          PARAMETER["Scale factor at natural origin", 0.9996012717, SCALEUNIT["Unity",1.0]]
-        ],
-        CS[Cartesian, 2],
-        AXIS["easting (X)",east],
-        AXIS["northing (Y)",north],
-        LENGTHUNIT["metre",1.0],
-        ID["EPSG",27700]
-      ],
-      VERTCRS["Newlyn",
-        VDATUM["Ordnance Datum Newlyn"],
-        CS[vertical,1],
-        AXIS["gravity-related height (H)",up],
-        LENGTHUNIT["metre",1.0],
-        ID["EPSG",5701]
-      ]
-      ]" ;
+    crs:crs_wkt =
+     PROJCRS["OSGB36 / British National Grid",
+       BASEGEOGCRS["OSGB36",
+         DATUM["Ordnance Survey of Great Britain 1936",
+           ELLIPSOID["Airy 1830",6377563.396,299.3249646,
+             LENGTHUNIT["metre",1]]],
+         PRIMEM["Greenwich",0,
+           ANGLEUNIT["degree",0.0174532925199433]]],
+       CONVERSION["British National Grid",
+         METHOD["Transverse Mercator"],
+           PARAMETER["Latitude of natural origin",49,
+             ANGLEUNIT["degree",0.0174532925199433]],
+           PARAMETER["Longitude of natural origin",-2,
+             ANGLEUNIT["degree",0.0174532925199433]],
+           PARAMETER["Scale factor at natural origin",0.999601\
+2717,
+             SCALEUNIT["unity",1]],
+           PARAMETER["False easting",400000,
+             LENGTHUNIT["metre",1]],
+           PARAMETER["False northing",-100000,
+             LENGTHUNIT["metre",1]]],
+     CS[Cartesian,2,ID["EPSG",4400]],
+       AXIS["Easting (E)",east],
+       AXIS["Northing (N)",north],
+         LENGTHUNIT["metre",1],
+     ID["EPSG",27700]]
   ...</pre>
 </div>
 </div>
@@ -13464,7 +13448,7 @@ OGC document 12-063. 1st May 2015.</p>
 <div id="footer">
 <div id="footer-text">
 Version v1.12.0-rc7-24-gb724218<br>
-Last updated 2025-01-14 13:13:28 UTC
+Last updated 2025-01-14 14:53:27 UTC
 </div>
 </div>
 </body>
